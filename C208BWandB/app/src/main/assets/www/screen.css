@@ -1,0 +1,182 @@
+
+body { background-color: #efefef; font: normal 12px arial, sans-serif; }
+
+#wandb_bg { position: absolute; margin: 0px; padding: 0px; visibility: hidden; }
+
+#speeds {
+	margin-top: 15px;
+	border-style: none;
+}
+
+#canvasEnvelope {
+	position: fixed;
+	margin-left: 10px;
+	margin-top: 10px;
+	visibility: hidden;
+	z-index: 12;
+}
+#canvasCargo {
+	position: fixed;
+	margin-left: 10px;
+	margin-top: 10px;
+	padding: 20px;
+	background-color: #fff;
+	border: 2px solid #000;
+	visibility: hidden;
+	z-index: 20;
+}
+
+#canvasCargoAndroid {
+	padding: 20px;
+	background-color: #fff;
+	border: 2px solid #000;
+}
+
+#speeds td { width: 30px; height: 18px; text-align: right; }
+
+#inf { border-color: #efefef; font-size: 12px; }
+#pob { font-size: 12px; }
+
+h1 { font-size: 20px; margin-top: 2px; margin-bottom: 2px; font-weight: bold; }
+h2 { font-size: 18px; margin-top: 2px; margin-bottom: 2px; font-weight: bold; }
+h3 { font-size: 16px; margin-top: 2px; margin-bottom: 2px; font-weight: bold; }
+h4 { font-size: 14px; margin-top: 2px; margin-bottom: 2px; font-weight: bold; }
+
+p { margin-top: 2px; }
+
+table, td, th { border: 1px solid black; border-collapse: collapse; }
+
+th { 
+	font-size: 12px;
+	font-weight: normal;
+	white-space: nowrap;
+	padding-left: 0px 0px 0px 3px;
+}
+
+td { padding: 0px 3px 0px 3px; height: 20px; white-space: nowrap; }
+td.inputFull { margin: 0px; padding: 0px; }
+
+input[type="number"] { 
+	margin: 0px;
+	width: 55px;
+	height: 25px;
+	border-style: none;
+	text-align: right;
+}
+
+input[type="checkbox"],
+input[type="radio"],
+input[type="radio"]:disabled,
+input[type="radio"]:disabled { 
+	width: 14px;
+	height: 14px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0px; }
+input[type="number"] { -moz-appearance: textfield; }
+input:disabled {
+	color: #000000;
+	background-color: #efefef;
+	margin: 0px;
+	vertical-align: middle;
+}
+
+input.special {
+	margin-right: 7px;
+	margin-left: 0px;
+	vertical-align: middle;
+}
+
+.button { 
+	margin-top: 1px;
+	margin-bottom: 1px;
+	padding: 2px 10px 2px 10px;
+	font-size: 10px;
+	background-color: #00ff00;
+	text-align: center;
+	border: 2px solid #00aa00;
+}
+.button:active { 
+	background-color: #00dd00;
+}
+
+#resetAll { float: left; margin-right: 3px; }
+
+#resetValues.button, #resetAll.button {
+	background-color: #ff0000;
+	border: 2px solid #aa0000;
+}
+#resetValues.button:active, #resetAll.button:active {
+	background-color: #dd0000;
+}
+
+#diagramBtn.button {
+	text-align: center;
+}
+
+.specialLoadTd { border-left: 0px; color: #ff0000; }
+.speedsTable { border-bottom: 1px solid black; }
+.speedsTable th { border: 1px solid black; text-align: center;}
+.border-left {
+	border-top: none;
+	border-right: none;
+	border-bottom: none;
+	border-left: 1px solid black;
+}
+.border-right {
+	border-top: none;
+	border-right: 1px solid black;
+	border-bottom: none;
+	border-left: none;
+}
+
+.border-bottom { border-bottom: 1px solid black; }
+.border-none { border: none; border-style: none; }
+
+.bg-green, .bg-green input { background-color: #00ff00; }
+.bg-yellow, .bg-yellow input { background-color: #ffff00; }
+.bg-red, .bg-red input { background-color: #ff0000; }
+.txt-green, .txt-green a { color: #00ff00; }
+.txt-red, .txt-red a { color: #ff0000; }
+.centerTxt { text-align: center; }
+.leftTxt { text-align: left; padding-left: 2px; }
+.rightTxt { text-align: right; padding-right: 2px; }
+.centerVertical { vertical-align: middle; }
+.instructList { padding-left: 12px; margin-bottom: 5px; margin-top: 0px; font-size: 10px; }
+.instructText { margin-bottom: 5px; margin-top: 0px; font-size: 10px; }
+.paddingRight { padding-right: 5px; }
+.tinyTxt { font-size: 8px; }
+.no-padding { padding: 0px; }
+.indPaxTable {
+	display: none;
+	margin: 0px;
+	padding: 0px;
+	border-style: none;
+	vertical-align: middle;
+}
+
+.indPaxTd {
+	margin: 0px;
+	height: 22px;
+	padding: 0px;
+	vertical-align: middle;
+}
+
+input.indPaxInput { width: 19px; height: 14px; margin: 0px; padding: 0px; font-size: 10px; text-align: center; }
+
+#tableHeading.noBorder, #tableHeading tr, #tableHeading td {
+	border-style: none;
+	border: 0px;
+}
+
+#seat1weight, #seat2weight, #seat3weight, #seat4weight {
+	position: absolute;
+	z-index: 5;
+	margin-top: 2px;
+	margin-left: 2px;
+	color: #ff0000;
+	font-size: 8px;
+}

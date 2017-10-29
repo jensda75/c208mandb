@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/home/jensda/Dropbox/android/projects/C208BWandB/app/build/intermediates/res/merged/debug/layout/main.xml",
+        "source": "/home/jensda/Dropbox/android/projects/C208BWandB/app/src/main/res/layout/main.xml"
+    },
+    {
+        "merged": "/home/jensda/Dropbox/android/projects/C208BWandB/app/build/intermediates/res/merged/debug/layout/table_fuel.xml",
+        "source": "/home/jensda/Dropbox/android/projects/C208BWandB/app/src/main/res/layout/table_fuel.xml"
+    }
+]

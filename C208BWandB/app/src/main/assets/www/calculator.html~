@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+body { 
+	margin: 0px;
+	padding: 0px;
+}
+
+button {
+	width: 40px;
+	height: 30px;
+}
+table {
+	margin: 0px;
+	padding: 0px;
+	border: 1px solid black;
+}
+
+input {
+	width: 200px;
+	padding-right: 3px;
+}
+
+#calcWindow {
+	text-align: right;
+}
+
+</style>
+
+<script>
+
+function clearError() {
+  var calcWindow = document.getElementById("calcWindow");
+	calcWindow.value = calcWindow.value.substring(0, calcWindow.value.length - 1);
+}
+
+function clearAll() {
+  var calcWindow = document.getElementById("calcWindow");
+  var storeValue = document.getElementById("storeValue");
+  var state = document.getElementById("state");
+	calcWindow.value = "0";
+	storeValue.value = "0";
+	state.value = "true";
+}
+
+function summary() {
+	var calcWindow = document.getElementById("calcWindow");
+	var total = eval(calcWindow.value);
+	calcWindow.value = total;
+}
+
+function plusMinus() {
+  var calcWindow = document.getElementById("calcWindow");
+	var sign = calcWindow.value.substring(0,1);
+	if(sign === "-") {
+		var nosign = calcWindow.value.substring(1,calcWindow.value.length);
+		calcWindow.value = nosign;
+	} else if(sign != "-") {
+		sign = "-";
+		calcWindow.value = sign + calcWindow.value;
+	}
+}
+
+function enterNumber(number) {
+  var calcWindow = document.getElementById("calcWindow");
+  var storeValue = document.getElementById("storeValue");
+  var state = document.getElementById("state");
+	var origValue = calcWindow.value;
+	var newValue;
+	if(origValue == "0") {
+		calcWindow.value = number;
+	} else if(origValue == "-0") {
+		calcWindow.value = "-" + number;
+	} else {
+		newValue = origValue + number;
+		calcWindow.value = newValue;
+	}
+}
+
+</script>
+<body>
+<table>
+	<tr>
+		<td colspan="5">
+			<input type="hidden" id="storeValue" value="0" />
+			<input type="hidden" id="state" value="true" />
+			<input type="text" id="calcWindow" value="0" disabled />
+		</td>
+	</tr>
+	<tr>
+		<td><button id="7" value="7" onclick="enterNumber(this.value)">7</button></td>
+		<td><button id="8" value="8" onclick="enterNumber(this.value)">8</button></td>
+		<td><button id="9" value="9" onclick="enterNumber(this.value)">9</button></td>
+		<td><button id="ce" onclick="clearError();">CE</button></td>
+		<td><button id="ac" onclick="clearAll();">AC</button></td>
+	</tr>
+	<tr>
+		<td><button id="4" value="4" onclick="enterNumber(this.value)">4</button></td>
+		<td><button id="5" value="5" onclick="enterNumber(this.value)">5</button></td>
+		<td><button id="6" value="6" onclick="enterNumber(this.value)">6</button></td>
+		<td><button id="multi" value="*" onclick="enterNumber(this.value);">*</button></td>
+		<td><button id="divide" value="/" onclick="enterNumber(this.value);">&divide;</button></td>
+	</tr>
+	<tr>
+		<td><button id="1" value="1" onclick="enterNumber(this.value)">1</button></td>
+		<td><button id="2" value="2" onclick="enterNumber(this.value)">2</button></td>
+		<td><button id="3" value="3" onclick="enterNumber(this.value)">3</button></td>
+		<td><button id="plus" value="+" onclick="enterNumber(this.value);">+</button></td>
+		<td><button id="minus" value="-" onclick="enterNumber(this.value);">-</button></td>
+	</tr>
+	<tr>
+		<td colspan="2"><button style="width: 100%;" id="0" value="0" onclick="enterNumber(this.value);">0</button></td>
+		<td><button id="plusMinus" onclick="plusMinus();">&pm;</button></td>
+		<td><button id="dec" onclick="enterNumber('.')">.</button></td>
+		<td><button id="equal" onclick="summary();">=</button></td>
+	</tr>
+</table>
+</body>
+</html>

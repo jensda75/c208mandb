@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">C208BMandB</string>
+	<string name="app_name_icon">C208B W &amp; B</string>
+	<string name="app_name_titlebar">C208B Weight And Balance</string>
+	<string name="app_name_titlebar_help">C208B Weight And Balance - Help</string>
+	<string name="app_name_titlebar_about">C208B Weight And Balance - About</string>
+	<string name="app_name_titlebar_cargo">C208B Weight And Balance - Cargo Zones</string>
+
+	<string name="menu_cargo">Show Cargo Zones</string>
+	<string name="menu_help">Help</string>
+	<string name="menu_about">About</string>
+	<string name="menu_fuelRequest">Fuel Request</string>
+	
+	
+</resources>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+
+<title>C208B Aircraft Weight And Balance</title>
+
+<meta name="author" content="Jens Daniel Sagen Johannesen">
+<meta name="viewport" content="initial-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+  
+<link rel="stylesheet" href="screen.css">
+<script src="functions.js"></script>
+
+<body onload="checkLocals(); aircraftDefine();">
+
+<div id="canvasEnvelope">
+	<canvas id="cgEnvelope" width="240" height="208" style="border: 2px solid #000" onclick="showHide('canvasEnvelope','hidden')"></canvas>
+</div>
+<div id="canvasCargo">
+	<canvas id="cargo" width="120" height="260" onclick="showHide('canvasCargo','hidden')"></canvas>
+</div>
+
+<div id="wrapper">
+<div id="aircraftDetails">
+	<table>
+		<tr>
+			<th colspan="4" id="storedValuesField">
+				<input type="hidden" id="row1wKgStoredValue" value="0" />
+				<input type="hidden" id="row2wKgStoredValue" value="0" />
+				<input type="hidden" id="row3wKgStoredValue" value="0" />
+				<input type="hidden" id="row4wKgStoredValue" value="0" />
+				<input type="hidden" id="row5wKgStoredValue" value="0" />
+				<input type="hidden" id="zone3KgStoredValue" value="0" />
+				<input type="hidden" id="zone4KgStoredValue" value="0" />
+				<input type="hidden" id="pod4KgStoredValue" value="0" />
+				<input type="hidden" id="seat1WeightSingleKgStoredValue" />
+				<input type="hidden" id="seat1WeightSingleLbStoredValue" />
+				<input type="hidden" id="seat1WeightDoubleKgStoredValue" />
+				<input type="hidden" id="seat1WeightDoubleLbStoredValue" />
+				<input type="hidden" id="seat1WeightBothKgStoredValue" />
+				<input type="hidden" id="seat1WeightBothLbStoredValue" />
+				<input type="hidden" id="seat2WeightSingleKgStoredValue" />
+				<input type="hidden" id="seat2WeightSingleLbStoredValue" />
+				<input type="hidden" id="seat2WeightDoubleKgStoredValue" />
+				<input type="hidden" id="seat2WeightDoubleLbStoredValue" />
+				<input type="hidden" id="seat2WeightBothKgStoredValue"  />
+				<input type="hidden" id="seat2WeightBothLbStoredValue" />
+				<input type="hidden" id="seat3WeightSingleKgStoredValue" />
+				<input type="hidden" id="seat3WeightSingleLbStoredValue" />
+				<input type="hidden" id="seat3WeightDoubleKgStoredValue" />
+				<input type="hidden" id="seat3WeightDoubleLbStoredValue" />
+				<input type="hidden" id="seat3WeightBothKgStoredValue" />
+				<input type="hidden" id="seat3WeightBothLbStoredValue" />
+				<input type="hidden" id="seat4WeightSingleKgStoredValue" />
+				<input type="hidden" id="seat4WeightSingleLbStoredValue" />
+				<input type="hidden" id="seat4WeightDoubleKgStoredValue" />
+				<input type="hidden" id="seat4WeightDoubleLbStoredValue" />
+				<input type="hidden" id="seat4WeightBothKgStoredValue" />
+				<input type="hidden" id="seat4WeightBothLbStoredValue" />
+				<input type="hidden" id="seat5WeightSingleKgStoredValue" />
+				<input type="hidden" id="seat5WeightSingleLbStoredValue" />
+				<input type="hidden" id="seat5WeightDoubleKgStoredValue" />
+				<input type="hidden" id="seat5WeightDoubleLbStoredValue" />
+				<input type="hidden" id="seat5WeightBothKgStoredValue" />
+				<input type="hidden" id="seat5WeightBothLbStoredValue" />
+			</th>
+			<th>Wght (kg)</th>
+			<th>Wght (lb)</th>
+			<th>Arm</th>
+			<th>Moment</th>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">MTOW</th>
+			<td><input type="number" id="mtowKg" value="4119" disabled /></td>
+			<td><input type="number" id="mtowLb" value="9062" disabled /></td>
+			<td colspan="2" style="text-align: center;">
+		  		<button id="resetValues" class="button" onclick="reset();">Reset<br />Values</button>
+		  	</td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">BEW</th>
+			<td><input type="number" id="bewKg" disabled /></td>
+			<td class="bg-yellow"><input type="number" id="bew" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); lbToKg('bewKg',this.id); calcMoment(this.id,'armBew','momentBew'); aircraftDefine();" /></td>
+			<td class="bg-yellow"><input type="number" id="armBew" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcMoment('bew',this.id,'momentBew'); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="momentBew" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Fuel (2224 lb)</th>
+			<td><input type="number" id="fuelKg" disabled /></td>
+			<td id="fuelTd" class="bg-yellow"><input type="number" id="fuel" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); lbToKg('fuelKg',this.id); checkWeightLimits(2224,this.id); calcMoment(this.id,'armFuel','momentFuel'); aircraftDefine();" /></td>
+			<td><input type="number" id="armFuel" value="203.77" disabled /></td>
+			<td class="bg-green"><input type="number" id="momentFuel" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Captain</th>
+			<td class="bg-yellow"><input type="number" id="wCpt" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); kgToLb(this.id,'wCptLb'); calcMoment('wCptLb','armCpt','momentCpt'); calcPilots(); aircraftDefine();" /></td>
+			<td><input type="number" id="wCptLb" disabled /></td>
+			<td><input type="number" id="armCpt" value="135.50" disabled /></td>
+			<td><input type="number" id="momentCpt" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">First Officer</th>
+			<td class="bg-yellow"><input type="number" id="wFo" onclick="document.execCommand('selectall')" onkeyup="setLocal('wFo',this.value); kgToLb(this.id,'wFoLb'); calcMoment('wFoLb','armFo','momentFo'); calcPilots(); aircraftDefine();" /></td>
+			<td><input type="number" id="wFoLb" disabled /></td>
+			<td><input type="number" id="armFo" value="135.50" disabled /></td>
+			<td><input type="number" id="momentFo" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Pilots Total</th>
+			<td><input type="number" id="pilotKg" disabled /></td>
+			<td class="bg-green"><input type="number" id="pilotLb" disabled /></td>
+			<td><input type="number" id="pilotArm" value="135.50" disabled /></td>
+			<td class="bg-green"><input type="number" id="pilotMoment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Max Payload</th>
+			<td id="maxPlTopTd" class="bg-green"><input type="number" id="maxPlTop" disabled /></td>
+			<td rowspan="2" colspan="3" style="text-align: center;">
+				<button id="cgEnvelopeBtn" class="button" onclick="cgEnvelope(); showHide('canvasEnvelope','visible');">Show CG<br />Envelope</button>
+<!--				<button id="printBtn" class="button" onclick="window.open('printFile.html','_blank');">Insert To<br />Load Sheet</button>
+-->			</td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Actual Payload</th>
+			<td id="actPlTopTd" class="bg-green"><input type="number" id="actPlTop" disabled /></td>
+		</tr>
+		<tr>
+			<td colspan="8" id="testValue">&nbsp;</td>
+		</tr>
+		<tr>
+			<th colspan="8" class="leftTxt">Passenger Details</th>
+		</tr>
+		<tr>
+		<span class="paxTable" id="pax">
+			<tr>
+				<th colspan="4" class="leftTxt">Total Weight (kg)</th>
+				<td class="bg-yellow"><input type="number" id="totPaxKgDef" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax(); aircraftDefine();"/></td>
+				<th class="rightTxt">Num Pax:&nbsp;</th>
+				<td colspan="2" style="text-align: center;">
+					<table>
+						<tr>
+							<td class="bg-yellow"><input type="number" id="a" style="width: 15px; text-align: center;" placeholder="A" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax();" /></td>
+							<td class="bg-yellow"><input type="number" id="c" style="width: 15px; text-align: center;" placeholder="C" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax();" /></td>
+							<td class="bg-yellow"><input type="number" id="i" style="width: 15px; text-align: center;" placeholder="I" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax();" /></td>
+							<td class="bg-yellow"><input type="number" id="crw" style="width: 15px; text-align: center;" placeholder="Cr" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax();" /></td>
+							<td style="background-color: #444; width: 0px;"></td>
+							<td class="bg-grey" id="totNumPaxDefTd"><input type="number" id="totNumPaxDef" style="width: 15px; text-align: center;" disabled /></td>
+							<td id="inf">&nbsp;</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="4" class="leftTxt">Avg Pax Weight (kg/lb)</th>
+				<td><input type="number" id="avgPaxKg" disabled /></td>
+				<td><input type="number" id="avgPaxLb" disabled /></td>
+				<th class="rightTxt" style="border-right: 0px;">POB:&nbsp;</th>
+				<td id="pob" style="border-left: 0px;">&nbsp;</td>
+			</tr>
+			<tr>
+				<th colspan="8">Individual Passenger Weights? 
+				<input type="checkbox" id="indPaxWght" onclick="setLocal(this.id,this.checked); calcPax();" /> 
+				<span style="font-weight: normal;">(For higher weight accuracy)</span>
+				</th>
+			</tr>
+			<tr>
+				<th>Row</th>
+				<th>Sngl</th>
+				<th>Dbl</th>
+				<th id="seatingWeight">Seating</th>
+				<th>Wght (kg)</th>
+				<th>Wght (lb)</th>
+				<th>Arm</th>
+				<th>Moment</th>
+			</tr>
+			<tr>
+				<th class="centerTxt">1</th>
+				<th><input type="checkbox" id="row1single" name="row1SeatConfig" onclick="setLocal(this.id,this.checked); checkSeatConfig(1); calcPax(); aircraftDefine();" checked="checked" /></th>
+				<th><input type="checkbox" id="row1double" name="row1SeatConfig" onclick="setLocal(this.id,this.checked); checkSeatConfig(1); calcPax(); aircraftDefine();" checked="checked" /></th>
+				<td id="row1Td" class="bg-yellow"><input type="number" id="row1" onclick="document.execCommand('selectall')" onkeyup="setLocal('row1',this.value); calcPax(); aircraftDefine();" /></td>
+				<td id="row1wKgTd"><input type="number" id="row1wKg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); storeValue(this.id,this.value); calcPax(); aircraftDefine();" disabled /></td>
+				<td id="row1wLbTd"><input type="number" id="row1wLb" disabled /></td>
+				<td id="row1armTd"><input type="number" id="row1arm" value="179.00" disabled /></td>
+				<td id="row1momentTd"><input type="number" id="row1moment" disabled /></td>
+			</tr>
+			<tr>
+				<th>2</th>
+				<th><input type="checkbox" id="row2single" name="row2SeatConfig" onclick="setLocal(this.id,this.checked); checkSeatConfig(2); calcPax(); aircraftDefine();" checked="checked" /></th>
+				<th><input type="checkbox" id="row2double" name="row2SeatConfig" onclick="setLocal(this.id,this.checked); checkSeatConfig(2); calcPax(); aircraftDefine();" checked="checked" /></th>
+				<td id="row2Td" class="bg-yellow"><input type="number" id="row2" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax(); aircraftDefine();" /></td>
+				<td id="row2wKgTd"><input type="number" id="row2wKg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); storeValue(this.id,this.value); calcPax(); aircraftDefine();" disabled /></td>
+				<td id="row2wLbTd"><input type="number" id="row2wLb" disabled /></td>
+				<td id="row2armTd"><input type="number" id="row2arm" value="214.00" disabled /></td>
+				<td id="row2momentTd"><input type="number" id="row2moment" disabled /></td>
+			</tr>
+			<tr>
+				<th>3</th>
+				<th><input type="checkbox" id="row3single" name="row3SeatConfig" onclick="setLocal(this.id,this.checked); checkSeatConfig(3); calcPax(); aircraftDefine();" checked="checked" /></th>
+				<th><input type="checkbox" id="row3double" name="row3SeatConfig" onclick="setLocal(this.id,this.checked); checkSeatConfig(3); calcPax(); aircraftDefine();" checked="checked" /></th>
+				<td id="row3Td" class="bg-yellow"><input type="number" id="row3" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax(); aircraftDefine();" /></td>
+				<td id="row3wKgTd"><input type="number" id="row3wKg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); storeValue(this.id,this.value); calcPax(); aircraftDefine();" disabled /></td>
+				<td id="row3wLbTd"><input type="number" id="row3wLb" disabled /></td>
+				<td id="row3armTd"><input type="number" id="row3arm" value="249.00" disabled /></td>
+				<td id="row3momentTd"><input type="number" id="row3moment" disabled /></td>
+			</tr>
+			<tr>
+				<th>4</th>
+				<th><input type="checkbox" id="row4single" name="row4SeatConfig" onclick="setLocal(this.id,this.checked); checkSeatConfig(4); calcPax(); aircraftDefine();" /></th>
+				<th><input type="checkbox" id="row4double" name="row4SeatConfig" onclick="setLocal(this.id,this.checked); checkSeatConfig(4); calcPax(); aircraftDefine();" /></th>
+				<td id="row4Td" class="bg-yellow"><input type="number" id="row4" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax(); aircraftDefine();" disabled /></td>
+				<td id="row4wKgTd"><input type="number" id="row4wKg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); storeValue(this.id,this.value); calcPax(); aircraftDefine();" disabled /></td>
+				<td id="row4wLbTd"><input type="number" id="row4wLb" disabled /></td>
+				<td id="row4armTd"><input type="number" id="row4arm" value="284.00" disabled /></td>
+				<td id="row4momentTd"><input type="number" id="row4moment" disabled /></td>
+			</tr>
+			<tr>
+				<th>5</th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+				<td id="row5Td" class="bg-yellow"><input type="number" id="row5" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcPax(); aircraftDefine();" /></td>
+				<td id="row5wKgTd"><input type="number" id="row5wKg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); storeValue(this.id,this.value); calcPax(); aircraftDefine();" disabled /></td>
+				<td id="row5wLbTd"><input type="number" id="row5wLb" disabled /></td>
+				<td id="row5armTd"><input type="number" id="row5arm" value="344.00" disabled /></td>
+				<td id="row5momentTd"><input type="number" id="row5moment" disabled /></td>
+			</tr>
+		</span>
+		</tr>
+		<tr>
+			<th colspan="3">Passenger Totals</th>
+			<td id="totNumPaxTd" class="bg-green"><input type="number" id="totNumPax" disabled /></td>
+			<td id="totPaxKgTopTd"><input type="number" id="totPaxKgTop" disabled /></td>
+			<td><input type="number" id="totPaxLb" disabled /></td>
+			<td><input type="number" id="totPaxArm" disabled /></td>
+			<td><input type="number" id="totPaxMoment" disabled /></td>
+		</tr>
+		<tr>
+			<td colspan="8">
+				<button id="diagramBtn" class="button" onclick="showCargo(); showHide('canvasCargo','visible');">Show Cargo Zone<br />Diagram</button>
+			</td>
+		</tr>
+		<tr>
+			<th colspan="3" style="border-right: 0px; text-align: left;">Cargo Zone</th>
+			<th id="zoneSpecialLoadHdg" style="border-left: 0px; text-align: right;">&nbsp;</th>
+			<th>Wght (kg)</th>
+			<th>Wght (lb)</th>
+			<th>Arm</th>
+			<th>Moment</th>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">1 (807 kg/1780 lb)</th>
+			<td id="zone1KgTd" class="bg-yellow"><input type="number" id="zone1Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); checkWeightLimits(807,this.id); calcCgCargoZone(); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="zone1Lb" disabled /></td>
+			<td><input type="number" id="zone1Arm" value="172.10" disabled /></td>
+			<td class="bg-green"><input type="number" id="zone1Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">2 (1706 kg/3100 lb)</th>
+			<td id="zone2KgTd" class="bg-yellow"><input type="number" id="zone2Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); checkWeightLimits(1706,this.id); calcCgCargoZone(); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="zone2Lb" disabled /></td>
+			<td><input type="number" id="zone2Arm" value="217.80" disabled /></td>
+			<td class="bg-green"><input type="number" id="zone2Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt" style="border-right: 0px;">3 (861 kg/1900 lb)</th>
+			<td class="specialLoadTd" id="specialLoadZone3Td"><input type="number" id="specialLoadZone3" disabled /></td>
+			<td id="zone3KgTd" class="bg-yellow"><input type="number" id="zone3Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); storeValue(this.id,this.value); checkWeightLimits(861,this.id); calcCgCargoZone(); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="zone3Lb" disabled /></td>
+			<td><input type="number" id="zone3Arm" value="264.40" disabled /></td>
+			<td class="bg-green"><input type="number" id="zone3Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt" style="border-right: 0px;">4 (625 kg/1380 lb)</th>
+			<td class="specialLoadTd" id="specialLoadZone4Td"><input type="number" id="specialLoadZone4" disabled /></td>
+			<td id="zone4KgTd" class="bg-yellow"><input type="number" id="zone4Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); storeValue(this.id,this.value); calcCgCargoZone(); checkWeightLimits(625,this.id); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="zone4Lb" disabled /></td>
+			<td><input type="number" id="zone4Arm" value="294.50" disabled /></td>
+			<td class="bg-green"><input type="number" id="zone4Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">5 (576 kg/1270 lb)</th>
+			<td id="zone5KgTd" class="bg-yellow"><input type="number" id="zone5Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcCgCargoZone(); checkWeightLimits(576,this.id); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="zone5Lb" disabled /></td>
+			<td><input type="number" id="zone5Arm" value="319.50" disabled /></td>
+			<td class="bg-green"><input type="number" id="zone5Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">6 (145 kg/320 lb)</th>
+			<td id="zone6KgTd" class="bg-yellow"><input type="number" id="zone6Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcCgCargoZone(); checkWeightLimits(145,this.id); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="zone6Lb" disabled /></td>
+			<td><input type="number" id="zone6Arm" value="344.00" disabled /></td>
+			<td class="bg-green"><input type="number" id="zone6Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt" style="border-right: 0px;">Cargo Zone Totals</th>
+			<td class="specialLoadTd"><input type="number" id="totZoneSpecialLoad" disabled /></td>
+			<td><input type="number" id="totZoneKgTop" disabled /></td>
+			<td><input type="number" id="totZoneLbTop" disabled /></td>
+			<td><input type="number" id="totZoneArmTop" disabled /></td>
+			<td><input type="number" id="totZoneMomentTop" disabled /></td>
+		</tr>
+		<tr>
+			<td colspan="8">&nbsp;</td>
+		</tr>
+		<tr>
+			<th class="leftTxt" style="border-right: 0px;" colspan="3">Cargo Pod</th>
+			<th id="podSpecialLoadHdg" style="border-left: 0px; text-align: right;">&nbsp;</th>
+			<th>Wght (kg)</th>
+			<th>Wght (lb)</th>
+			<th>Arm</th>
+			<th>Moment</th>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">A (104 kg/230 lb)</th>
+			<td id="pod1KgTd" class="bg-yellow"><input type="number" id="pod1Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); checkWeightLimits(104,this.id); calcCgPod(); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="pod1Lb" disabled /></td>
+			<td><input type="number" id="pod1Arm" value="132.40" disabled /></td>
+			<td class="bg-green"><input type="number" id="pod1Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">B (140 kg/310 lb)</th>
+			<td id="pod2KgTd" class="bg-yellow"><input type="number" id="pod2Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); checkWeightLimits(140,this.id); calcCgPod(); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="pod2Lb" disabled /></td>
+			<td><input type="number" id="pod2Arm" value="182.10" disabled /></td>
+			<td class="bg-green"><input type="number" id="pod2Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">C (122 kg/270 lb)</th>
+			<td id="pod3KgTd" class="bg-yellow"><input type="number" id="pod3Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); checkWeightLimits(122,this.id); calcCgPod(); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="pod3Lb" disabled /></td>
+			<td><input type="number" id="pod3Arm" value="233.40" disabled /></td>
+			<td class="bg-green"><input type="number" id="pod3Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt" style="border-right: 0px;">D (127 kg/280 lb)</th>
+			<td class="specialLoadTd" id="specialLoadPod4Td"><input type="number" id="specialLoadPod4" disabled /></td>
+			<td id="pod4KgTd" class="bg-yellow"><input type="number" id="pod4Kg" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); storeValue(this.id,this.value); checkWeightLimits(127,this.id); calcCgPod(); aircraftDefine();" /></td>
+			<td class="bg-green"><input type="number" id="pod4Lb" disabled /></td>
+			<td><input type="number" id="pod4Arm" value="287.60" disabled /></td>
+			<td class="bg-green"><input type="number" id="pod4Moment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt" style="border-right: 0px;">Cargo Pod Totals</th>
+			<td class="specialLoadTd"><input type="number" id="totPodSpecialLoad" disabled /></td>
+			<td><input type="number" id="totPodKgTop" disabled /></td>
+			<td><input type="number" id="totPodLbTop" disabled /></td>
+			<td><input type="number" id="totPodArmTop" disabled /></td>
+			<td><input type="number" id="totPodMomentTop" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="8" id="testValue2">&nbsp;</th>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt">Special Load</th>
+			<th>Onbrd</th>
+			<th>Wght (kg)</th>
+			<th colspan="3">Loading</th>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt">Life Raft</th>
+			<td class="centerTxt"><input type="checkbox" name="specialLoad" id="numLifeRaft" onclick="setLocal(this.id,this.checked); statusSpecial(this.id); calcCgCargoZone(); checkWeightLimits(861,'zone3Kg'); checkWeightLimits(625,'zone4Kg'); aircraftDefine();" /></td>
+			<td id="weightLifeRaftTd"><input type="number" id="weightLifeRaft" value="30" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcCgCargoZone(); checkWeightLimits(861,'zone3Kg'); checkWeightLimits(625,'zone4Kg'); aircraftDefine();" disabled /></td>
+			<td colspan="3" id="placementLifeRaft">Zone 3/4 (50% each)</td>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt">Survival Kit</th>
+			<td class="centerTxt"><input type="checkbox" name="specialLoad" id="numSurKit" onclick="setLocal(this.id,this.checked); statusSpecial(this.id); calcCgPod(); checkWeightLimits(127,'pod4Kg'); aircraftDefine();" /></td>
+			<td id="weightSurKitTd"><input type="number" id="weightSurKit" value="20" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcCgPod(); checkWeightLimits(127,'pod4Kg'); aircraftDefine();" disabled /></td>
+			<td colspan="3" id="placementSurKit">Pod D</td>
+		</tr>
+		<tr>
+			<th colspan="3" class="leftTxt">Surfboards</th>
+			<td class="centerTxt"><input type="checkbox" name="specialLoad" id="numSurf" onclick="setLocal(this.id,this.checked); statusSpecial(this.id); calcCgCargoZone(); checkWeightLimits(861,'zone3Kg'); checkWeightLimits(625,'zone4Kg'); aircraftDefine();" /></td>
+			<td id="weightSurfTd"><input type="number" id="weightSurf" value="0" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); calcCgCargoZone(); checkWeightLimits(861,'zone3Kg'); checkWeightLimits(625,'zone4Kg'); aircraftDefine();" disabled /></td>
+			<td colspan="3" id="placementSurf">1/3 Zone 3 - 2/3 Zone 4</td>
+		</tr>
+		<tr>
+			<td colspan="8">&nbsp;</td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Max Payload</th>
+			<td id="maxPlBottomTd" class="bg-green"><input type="number" id="maxPlBottom" disabled /></td>
+			<td rowspan="2" colspan="3" id="valueTest" style="text-align: center;">
+				<button class="button" onclick="cgEnvelope(); showHide('canvasEnvelope','visible')">Show CG<br />Envelope</button>
+			</td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Act. Payload</th>
+			<td id="actPlBottomTd" class="bg-green"><input type="number" id="actPlBottom" disabled /></td>
+		</tr>
+		<tr>
+			<td colspan="8">&nbsp;</td>
+		</tr>
+		<tr>
+			<th colspan="4" class="bg-green leftTxt">Ramp Weight</th>
+			<td><input type="number" id="rampKg" disabled /></td>
+			<td id="rampLbTd" class="bg-green"><input type="number" id="rampLb" disabled /></td>
+			<td id="rampArmTd" class="bg-green"><input type="number" id="rampArm" disabled /></td>
+			<td class="bg-green"><input type="number" id="rampMoment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Start And Taxi</th>
+			<td><input type="number" id="taxiKg" value="16" disabled /></td>
+			<td><input type="number" id="taxiLb" value="35" disabled /></td>
+			<td><input type="number" id="taxiArm" value="203.77" disabled /></td>
+			<td><input type="number" id="taxiMoment" value="7.20" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="bg-green leftTxt">Takeoff Weight</th>
+			<td><input type="number" id="tkofKg" disabled /></td>
+			<td id="tkofLbTd" class="bg-green"><input type="number" id="tkofLb" disabled /></td>
+			<td id="tkofArmTd" class="bg-green"><input type="number" id="tkofArm" disabled /></td>
+			<td class="bg-green"><input type="number" id="tkofMoment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="leftTxt">Fuel Used</th>
+			<td><input type="number" id="fuelUsedKg" disabled /></td>
+			<td class="bg-yellow"><input type="number" id="fuelUsedLb" value="0" onclick="document.execCommand('selectall')" onkeyup="setLocal(this.id,this.value); lbToKg('fuelUsedKg',this.id); calcMoment(this.id,'fuelUsedArm','fuelUsedMoment'); aircraftDefine();" /></td>
+			<td><input type="number" id="fuelUsedArm" value="203.77" disabled /></td>
+			<td class="bg-green"><input type="number" id="fuelUsedMoment" disabled /></td>
+		</tr>
+		<tr>
+			<th colspan="4" class="bg-green leftTxt">Landing Weight</th>
+			<td><input type="number" id="ldgKg" disabled /></td>
+			<td id="ldgLbTd" class="bg-green"><input type="number" id="ldgLb" disabled /></td>
+			<td id="ldgArmTd" class="bg-green"><input type="number" id="ldgArm" disabled /></td>
+			<td class="bg-green"><input type="number" id="ldgMoment" disabled /></td>
+		</tr>
+	</table>
+</div>
+
+<div id="speeds">
+	<h3>Speeds</h3>
+	<table class="speedsTable">
+		<tr>
+			<th>Lift Off: </th>
+			<td class="paddingRight" id="liftSpeed">&nbsp;</td>
+			<th>Vglide: </th>
+			<td class="paddingRight" id="glideSpeed">&nbsp;</td>
+			<th>Va: </th>
+			<td class="paddingRight" id="vaSpeed">&nbsp;</td>
+			<th>Vref: </th>
+			<td class="paddingRight" id="vrefSpeed">&nbsp;</td>
+		</tr>
+		<tr>
+			<td colspan="8" style="text-align: left; padding-top: 3px;">	
+				<p class="instructText">All speeds are derived from POH values shown in table below.<br />
+				Vref speeds are short field threshold speeds.</p>
+			</td>
+		</tr>
+		<tr>
+			<th colspan="2">Lift Off</th>
+			<th colspan="2">Vglide</th>
+			<th colspan="2">Va</th>
+			<th colspan="2">Vref</th>
+		</tr>
+		<tr>
+			<td class="border-left">9062</td>
+			<td class="border-right">71</td>
+			<td class="border-left">9062</td>
+			<td class="border-right">96</td>
+			<td class="border-left">9062</td>
+			<td class="border-right">143</td>
+			<td class="border-left">9000</td>
+			<td class="border-right">80</td>
+		</tr>
+		<tr>
+			<td class="border-left">8750</td>
+			<td class="border-right">70</td>
+			<td class="border-left">8750</td>
+			<td class="border-right">95</td>
+			<td class="border-left">7500</td>
+			<td class="border-right">137</td>
+			<td class="border-left">8750</td>
+			<td class="border-right">79</td>
+		</tr>
+		<tr>
+			<td class="border-left">8300</td>
+			<td class="border-right">67</td>
+			<td class="border-left">7500</td>
+			<td class="border-right">87</td>
+			<td class="border-left">6250</td>
+			<td class="border-right">125</td>
+			<td class="border-left">8500</td>
+			<td class="border-right">78</td>
+		</tr>
+		<tr>
+			<td class="border-left">7800</td>
+			<td class="border-right">64</td>
+			<td class="border-left">6250</td>
+			<td class="border-right">79</td>
+			<td class="border-left">5000</td>
+			<td class="border-right">112</td>
+			<td class="border-left">8000</td>
+			<td class="border-right">75</td>
+		</tr>
+		<tr>
+			<td class="border-left">7300</td>
+			<td class="border-right">61</td>
+			<td class="border-left">5000</td>
+			<td class="border-right">71</td>
+			<td class="border-left">&nbsp;</td>
+			<td class="border-right">&nbsp;</td>
+			<td class="border-left">7500</td>
+			<td class="border-right">73</td>
+		</tr>
+		<tr class="border-bottom">
+			<td class="border-left">&nbsp;</td>
+			<td class="border-right">&nbsp;</td>
+			<td class="border-left">&nbsp;</td>
+			<td class="border-right">&nbsp;</td>
+			<td class="border-left">&nbsp;</td>
+			<td class="border-right">&nbsp;</td>
+			<td class="border-left">7000</td>
+			<td class="border-right">71</td>
+		</tr>
+	</table>
+</div>
+
+</div>
+</body>
+</html>

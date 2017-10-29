@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/jensda/Dropbox/android/projects/C208BWandB/app/build/intermediates/res/merged/debug/drawable/border_yellow.xml",
+        "source": "/home/jensda/Dropbox/android/projects/C208BWandB/app/src/main/res/drawable/border_yellow.xml"
+    },
+    {
+        "merged": "/home/jensda/Dropbox/android/projects/C208BWandB/app/build/intermediates/res/merged/debug/drawable/border_grey.xml",
+        "source": "/home/jensda/Dropbox/android/projects/C208BWandB/app/src/main/res/drawable/border_grey.xml"
+    },
+    {
+        "merged": "/home/jensda/Dropbox/android/projects/C208BWandB/app/build/intermediates/res/merged/debug/drawable/border_green.xml",
+        "source": "/home/jensda/Dropbox/android/projects/C208BWandB/app/src/main/res/drawable/border_green.xml"
+    },
+    {
+        "merged": "/home/jensda/Dropbox/android/projects/C208BWandB/app/build/intermediates/res/merged/debug/drawable/border_fuel.xml",
+        "source": "/home/jensda/Dropbox/android/projects/C208BWandB/app/src/main/res/drawable/border_fuel.xml"
+    }
+]
